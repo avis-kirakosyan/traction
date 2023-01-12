@@ -60,8 +60,6 @@ services:
     command: ["-c", "sleep 5; ./ngrok-wait.sh"]
     volumes:
       - "./acapy-static-args.yml:/home/indy/acapy-static-args.yml"
-    extra_hosts:
-      - host.docker.internal:host-gateway
 
   traction-db:
     image: "postgres:12"
@@ -114,8 +112,11 @@ services:
       - ACAPY_ADMIN_URL_API_KEY=${ACAPY_ADMIN_URL_API_KEY}
     ports:
       - ${TENANT_PROXY_PORT}:8080
-    extra_hosts:
-      - host.docker.internal:host-gateway
+
+networks:
+  default:
+    external: 
+      name: oidc_vc_auth
 
 volumes:
   traction-wallet:
