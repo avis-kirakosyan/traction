@@ -13,10 +13,19 @@
     "settings": "Settings",
     "logout": "Logout"
   },
-  "contact": {
-    "contacts": "Contacts",
-    "create": "Create Contact",
-    "accept": "Accept Invitation"
+  "connect": {
+    "connections": "Connections",
+    "edit": "Edit Connection",
+    "delete": "Delete Connection",
+    "invitations": {
+      "invitations": "Invitations",
+      "create": "Create Invitation",
+      "single": "Single Use",
+      "singleCreate": "Create Single Use Invitation",
+      "multi": "Multi Use",
+      "multiCreate": "Create Multi Use Invitation",
+      "regenerate": "Regenerate Invitation"
+    }
   },
   "issue": {
     "issuance": "Issuance",
@@ -35,7 +44,7 @@
   "configuration": {
     "configuration": "Configuration",
     "schemasCreds": {
-      "schemas": "Schemas",
+      "schemas": "Stored Schemas",
       "create": "Create Schema",
       "copy": "Copy Schema"
     },
@@ -76,6 +85,26 @@
     }
   },
   "about": {
-    "about": "About"
+    "about": "About",
+    "traction": {
+      "traction": "Traction",
+      "info": "Licence information for TRACTION",
+      "tractionVersion": "Traction version {version}",
+      "uiVersion": "Tenant UI version {version}",
+      "url": "Traction URL",
+      "imageTag": "Image tag",
+      "imageVersion": "Image version",
+      "imageCreated": "Image created at",
+      "repository": "GitHub repo for Traction"
+    },
+    "acaPy": {
+      "acaPy": "ACA-Py",
+      "info": "Licence information for ACA-Py",
+      "acapyVersion": "ACA-Py version {version}",
+      "ledger": "Ledger",
+      "ledgerBrowser": "Ledger Browser",
+      "tailsServer": "Tails Server",
+      "endorser": "Endorser"
+    }
   }
 }

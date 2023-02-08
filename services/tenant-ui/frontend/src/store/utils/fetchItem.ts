@@ -1,4 +1,4 @@
-import { useAcapyTenantApi } from '../acapyTenantApi';
+import { useAcapyApi } from '../acapyApi';
 import { AxiosRequestConfig } from 'axios';
 import { Ref } from 'vue';
 
@@ -9,8 +9,12 @@ export async function fetchItem(
   loading: Ref<boolean>,
   params: object = {}
 ): Promise<object | null | undefined> {
-  const acapyApi = useAcapyTenantApi();
-  const dataUrl = `${url}${id}`;
+  const acapyApi = useAcapyApi();
+  let dataUrl = url;
+  if (id) {
+    // Normalize if the caller supplies a trailing slash or not
+    dataUrl = `${dataUrl.replace(/\/$/, '')}/${id}`;
+  }
   console.log(` > fetchItem(${dataUrl})`);
   error.value = null;
   let result = null;

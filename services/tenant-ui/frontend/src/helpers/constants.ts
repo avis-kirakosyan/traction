@@ -9,7 +9,18 @@ export const API_PATH = {
   EMAIL_CONFIRMATION: '/email/reservationConfirmation',
   EMAIL_STATUS: '/email/reservationStatus',
 
-  // Acapy and plugins (and Traction for now)
+  OIDC_INNKEEPER_LOGIN: '/api/innkeeperLogin',
+
+  // Acapy and Plugins
+  BASICMESSAGES: '/basicmessages',
+  BASICMESSAGES_SEND: (connId: string) => `/connections/${connId}/send-message`,
+
+  CONNECTIONS: '/connections',
+  CONNECTION: (id: string) => `/connections/${id}`,
+  CONNECTIONS_CREATE_INVITATION: '/connections/create-invitation',
+  // CONTACTS_RECEIVE_INVITATION: '/tenant/v1/contacts/receive-invitation',
+  CONNECTIONS_INVITATION: (id: string) => `/connections/${id}/invitation`,
+
   INNKEEPER_TOKEN: '/innkeeper/token',
   INNKEEPER_TENANTS: '/innkeeper/tenants/',
   INNKEEPER_TENANT: (id: string) => `/innkeeper/tenants/${id}`,
@@ -19,14 +30,35 @@ export const API_PATH = {
   INNKEEPER_RESERVATIONS_DENY: (id: string) =>
     `/innkeeper/reservations/${id}/deny`,
 
-  OIDC_INNKEEPER_LOGIN: '/api/innkeeperLogin',
+  MULTITENANCY_RESERVATIONS: '/multitenancy/reservations',
+  MULTITENANCY_RESERVATION: (resId: string) =>
+    `/multitenancy/reservations/${resId}`,
+  MULTITENANCY_RESERVATION_CHECK_IN: (resId: string) =>
+    `/multitenancy/reservations/${resId}/check-in`,
+  MULTITENANCY_TENANT_TOKEN: (tenantId: string) =>
+    `/multitenancy/tenant/${tenantId}/token`,
+  MULTITENANCY_WALLET_TOKEN: (tenantId: string) =>
+    `/multitenancy/wallet/${tenantId}/token`,
 
+  SCHEMAS: '/schemas',
+  SCHEMA: (id: string) => `/schemas/${id}`,
+  SCHEMAS_CREATED: '/schemas/created',
+  SCHEMAS_WRITE_RECORD: (id: string) => `/schemas/${id}/write_record`,
+
+  SCHEMA_STORAGE: '/schema-storage',
+  SCHEMA_STORAGE_SYNC: '/schema-storage/sync-created',
+  SCHEMA_STORAGE_ITEM: (id: string) => `/schema-storage/${id}`,
+
+  TENANT_SELF: '/tenant',
+  TENANT_ENDORSER_CONNECTION: '/tenant/endorser-connection',
+  TENANT_ENDORSER_INFO: '/tenant/endorser-info',
+  TENANT_REGISTER_PUBLIC_DID: '/tenant/register-public-did',
   TENANT_TOKEN: '/tenant/token',
 
-  CONTACTS: '/tenant/v1/contacts/',
-  CONTACTS_CREATE_INVITATION: '/tenant/v1/contacts/create-invitation',
-  CONTACTS_RECEIVE_INVITATION: '/tenant/v1/contacts/receive-invitation',
-  CONTACT: (id: string) => `/tenant/v1/contacts/${id}`,
+  WALLET_DID_PUBLIC: '/wallet/did/public',
+  WALLET_DID_CREATE: '/wallet/did/create',
+
+  // Legacy (to be removed)
 
   HOLDER_CREDENTIALS: '/tenant/v1/holder/credentials/',
   HOLDER_CREDENTIALS_ACCEPT_OFFER: (id: string) =>
@@ -50,32 +82,16 @@ export const API_PATH = {
   VERIFIER_PRESENTATION_TEMPLATES:
     '/tenant/v1/verifier/presentation_templates/',
 
-  GOVERNANCE_SCHEMA_TEMPLATES: '/tenant/v1/governance/schema_templates/',
-  GOVERNANCE_SCHEMA_TEMPLATES_IMPORT:
-    '/tenant/v1/governance/schema_templates/import',
-  GOVERNANCE_SCHEMA_TEMPLATE: (id: string) =>
-    `/tenant/v1/governance/schema_templates/${id}`,
   GOVERNANCE_CREDENTIAL_TEMPLATES:
     '/tenant/v1/governance/credential_templates/',
   GOVERNANCE_CREDENTIAL_TEMPLATE: (id: string) =>
     `/tenant/v1/governance/credential_templates/${id}`,
+};
 
-  BASICMESSAGES: '/basicmessages',
-  BASICMESSAGES_SEND: (connId: string) => `/connections/${connId}/send-message`,
-
-  TENANT_SELF: '/tenant/v1/admin/self',
-  TENANT_MAKE_ISSUER: '/tenant/v1/admin/make-issuer',
-  TENANT_CONFIGURATION: '/tenant/v1/admin/configuration',
-
-  MULTITENANCY_RESERVATIONS: '/multitenancy/reservations',
-  MULTITENANCY_RESERVATION: (resId: string) =>
-    `/multitenancy/reservations/${resId}`,
-  MULTITENANCY_RESERVATION_CHECK_IN: (resId: string) =>
-    `/multitenancy/reservations/${resId}/check-in`,
-  MULTITENANCY_TENANT_TOKEN: (tenantId: string) =>
-    `/multitenancy/tenant/${tenantId}/token`,
-  MULTITENANCY_WALLET_TOKEN: (tenantId: string) =>
-    `/multitenancy/wallet/${tenantId}/token`,
+export const CONNECTION_STATUSES = {
+  INVITATION: 'invitation',
+  ACTIVE: 'active',
+  RESPONSE: 'response',
 };
 
 export const RESERVATION_STATUSES = {
@@ -86,4 +102,6 @@ export const RESERVATION_STATUSES = {
   // Not an API status, but the state on the FE when just checked-in
   // so they can one-time see the wallet key
   SHOW_WALLET: 'show_wallet',
+  // Not API response but show on the FE when it 404s
+  NOT_FOUND: 'not_found',
 };
