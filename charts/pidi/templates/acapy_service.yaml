@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "acapy.fullname" . }}
+  labels:
+    {{- include "acapy.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.acapy.service.type }}
+  selector:
+    app.kubernetes.io/name: pidi-acapy
+  ports:
+    - port: {{ .Values.acapy.service.adminPort }}
+      targetPort: 8031
+      protocol: TCP
+      name: admin 

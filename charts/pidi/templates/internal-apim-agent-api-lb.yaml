@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: apim-agent-service
+  name: apim-agent-service
+  annotations:
+    service.beta.kubernetes.io/azure-load-balancer-internal: "true"
+spec:
+  type: LoadBalancer
+  selector:
+    app.kubernetes.io/name: pidi-acapy
+  ports:
+    - port: 80
+      targetPort: 8030
+      protocol: TCP
+status:
+  loadBalancer: {}

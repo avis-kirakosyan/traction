@@ -12,7 +12,7 @@ services:
     build:
       context: ../plugins
       dockerfile: ./docker/Dockerfile
-    image: traction-local:acapy
+    image: traction-pidevgeneralcontainerregistry.azurecr.io/traction_plugins:latest
 
   traction-agent:
     build:
@@ -108,7 +108,7 @@ services:
     build:
       context: ../plugins
       dockerfile: ./docker/Dockerfile.tenant-proxy
-    image: traction-local:tenant-proxy
+    image: pidevgeneralcontainerregistry.azurecr.io/traction-tenant-proxy:latest
     depends_on:
       traction-agent:
         condition: service_started

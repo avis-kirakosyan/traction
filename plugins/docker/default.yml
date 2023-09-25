@@ -1,24 +1,24 @@
 label: traction-plugin
 
 # Admin
-admin: [0.0.0.0, 3001]
+admin: [0.0.0.0, 8031]
 admin-insecure-mode: false
 admin-api-key: change-me
 
 # Transport
 inbound-transport:
-  - [http, 0.0.0.0, 3000]
-  - [ws, 0.0.0.0, 3002]
+  - [http, 0.0.0.0, 8030]
+#  - [ws, 0.0.0.0, 8032]
 outbound-transport: http
 endpoint:
-  - http://localhost:3000
+  - http://52.137.90.124:8030/
 
 # plugins
 plugin:
   - traction_plugins.basicmessage_storage.v1_0
+  - traction_plugins.acapy_plugin_qa.v1_0
   - traction_plugins.multitenant_provider.v1_0
   - traction_plugins.traction_innkeeper.v1_0
-  - traction_plugins.traction_metadata
 
 # block-plugin:
 

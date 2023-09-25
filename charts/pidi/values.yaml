@@ -1,0 +1,261 @@
+# Default values for helm-chart.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+global:
+  nameOverride: ""
+  # global.fullnameOverride and postgresql.fullnameOverride must be changed (and match!!!) if deploying multiple instances to the same namespace
+  # the postgresql chart creates secrets and pvcs related to the fullname and will be identical without the override.
+  # use the global.fullnameOverride to install a different named helm instance and will affect naming of all objects and routes for that chart.
+  # for pull requests, can set to something like pr-NN-traction.
+  fullnameOverride: "pidi"
+
+  # -- Domain suffix to be used for default hostpaths in ingress
+  # override in different environments, or for each app
+  # --set global.ingressSuffix
+  #ingressSuffix: -prod.apps.silver.devops.gov.bc.ca
+
+  persistence:
+    # -- If true, the Postgres chart is deployed
+    deployPostgres: false
+
+  # -- The used ledger. Will be used for default values.
+  ledger: bcovrin-test
+
+acapy:
+  image:
+    # building our own acapy with plugins
+    tag: "pidevgeneralcontainerregistry.azurecr.io/traction_plugins"
+    version: 'latest'
+    # buildtime: '2022-10-28T01:30:31.105Z'
+    pullPolicy: Always
+    # repository: bcgovimages/aries-cloudagent
+    # pullPolicy: IfNotPresent
+    # --  Overrides the image tag whose default is the chart appVersion.
+    # tag: py36-1.16-1_0.7.4
+
+  # The agent seed, 32 characters. Will be generated if not defined here
+  agentSeed: ""
+
+  # if true use --admin-insecure-mode, else we set --admin-api-key
+  adminInsecureMode: false
+
+  labelOverride: ""
+
+  readOnlyMode: false
+
+  # list the plugins on our image we want to enable.
+  plugins:
+    basicmessageStorage: true
+    multitenantProvider: true
+    tractionInnkeeper: true
+    acapyPluginQA: true
+
+  pluginValues:
+    multitenantProvider:
+      manager:        
+        className: traction_plugins.multitenant_provider.v1_0.manager.AskarMultitokenMultitenantManager
+        alwaysCheckProvidedWalletKey: true
+      errors:
+        onUnneededWalletKey: false
+      tokenExpiry:
+        units: days
+        amount: 1  
+    tractionInnkeeper:
+      walletName: traction_innkeeper
+      printKey: false
+      printToken: false
+      reservationExpiryMinutes: 10080
+
+  imagePullSecrets: []
+  nameOverride: ""
+  fullnameOverride: ""
+
+  podAnnotations: {}
+
+  podSecurityContext: {}
+    # fsGroup: 2000
+
+
+  securityContext:
+    # capabilities:
+    #   drop:
+    #   - ALL
+    # readOnlyRootFilesystem: true
+    # runAsNonRoot: true
+    # runAsUser: 1001
+
+  service:
+    type: ClusterIP
+    adminPort: 8031
+    httpPort: 8030
+    walletScheme: DatabasePerWallet
+    endorserAlias: endorser
+    endorserPublicDID: Ket75eV5UQvVkW2XBjgDH7
+
+  tails:
+    # -- Set to true to enable revocation (external tails server required)
+    enabled: false
+
+    # -- Override the otherwise ledger-specifically generated base URL of the external tails server
+    baseUrlOverride: ""
+
+    # -- Override the otherwise ledger-specifically generated upload URL of the external tails server
+    uploadUrlOverride: ""
+
+  # resources:
+  #   # We usually recommend not to specify default resources and to leave this as a conscious
+  #   # choice for the user. This also increases chances charts run on environments with little
+  #   # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  #   # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  #   limits:
+  #     cpu: 600m
+  #     memory: 2600Mi
+  #   requests:
+  #     cpu: 300m
+  #     memory: 1300Mi
+
+  nodeSelector: {}
+
+  tolerations: []
+
+  affinity: {}
+
+  multitenancyConfig:
+    walletType: askar-profile
+    walletName: askar-wallet
+
+  staticArgs:
+    autoAcceptInvites: true
+    autoAcceptRequests: true
+    autoRespondMessages: true
+    autoRespondCredentialProposal: false
+    autoRespondCredentialOffer: false
+    autoRespondCredentialRequest: true
+    autoRespondPresentationProposal: true
+    autoRespondPresentationRequest: false
+    autoStoreCredential: true
+    autoVerifyPresentation: true
+    autoPingConnection: true
+    autoProvision: true
+    monitorPing: true
+    publicInvites: true
+    logLevel: debug
+    multitenant: true
+    multitenantAdmin: true
+    walletType: askar
+    notifyRevocation: true
+    monitorRevocationNotification: true
+    preserveExchangeRecords: true
+    emitNewDidcommPrefix: true
+    emitNewDidcommMimeType: true
+
+
+  secret:
+    adminurl:
+      # set to false and provide a value to "hardcode" the password value
+      generated: true
+      value: "change-me"
+    pluginInnkeeper:
+      generated: true
+      walletkey: "change-me"
+      tenantid: "innkeeper"
+
+postgresql:
+  # when overriding global.fullnameOverride, you must override this to match.
+  fullnameOverride: "pidi"
+
+  image:
+    tag: 12
+
+  # --  PostgreSQL service configuration
+  service:
+    port: 5432
+
+  existingSecret: '{{ template "postgresql.secret.name" . }}'
+
+  # -- PostgreSQL Database to create.
+  postgresqlDatabase: pidi
+
+  # --  Persistent Volume Storage configuration. ref: https://kubernetes.io/docs/user-guide/persistent-volumes
+  persistence:
+    enabled: true
+    size: 1Gi
+    storageClass: netapp-file-standard
+
+  # -- add securityContext (fsGroup, runAsUser). These need to be false for Openshift 4
+  securityContext:
+    enabled: false
+
+  containerSecurityContext:
+    enabled: false
+
+  # resources:
+  #   limits:
+  #     cpu: 600m
+  #     memory: 2600Mi
+  #   requests:
+  #     cpu: 300m
+  #     memory: 1300Mi
+
+traction:
+  config:
+    ledger:
+      browserUrlOverride: ""
+      genesisUrlOverride: ""
+
+tenant_proxy:
+  image:
+    tag: "pidevgeneralcontainerregistry.azurecr.io/traction-tenant-proxy"
+    version: 'latest'
+    # buildtime: '2022-01-20T22:37:11.102Z'
+    pullPolicy: IfNotPresent
+
+  serviceAccount:
+    # -- Specifies whether a service account should be created
+    create: false
+    # -- Annotations to add to the service account
+    annotations: {}
+    # -- The name of the service account to use. If not set and create is true, a name is generated using the fullname template
+    name: ""
+
+  imagePullSecrets: []
+
+  podAnnotations: {}
+
+  podSecurityContext: {}
+    # fsGroup: 2000
+
+  securityContext: {}
+    # capabilities:
+    #   drop:
+    #   - ALL
+    # readOnlyRootFilesystem: true
+    # runAsNonRoot: true
+    # runAsUser: 1000
+
+  service:
+    type: ClusterIP
+    port: 80
+
+
+
+  replicas: 1
+
+  # resources:
+  #   # We usually recommend not to specify default resources and to leave this as a conscious
+  #   # choice for the user. This also increases chances charts run on environments with little
+  #   # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  #   # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  #   limits:
+  #     cpu: 20m
+  #     memory: 100Mi
+  #   requests:
+  #     cpu: 10m
+  #     memory: 50Mi
+
+  nodeSelector: {}
+
+  tolerations: []
+
+  affinity: {}
